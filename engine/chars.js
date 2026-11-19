@@ -1,4 +1,4 @@
-/* 结果形象：潮酷长腿怪。用零件拼出原创小怪物，输出 SVG 字符串。viewBox 0 0 200 220 */
+/* 结果形象：物件成精。每个形象是一段绘图函数，用这里的工具包画，输出 SVG 字符串。viewBox 0 0 200 220 */
 (function (root) {
   'use strict';
   var INK = '#2b2233', PINK = '#ff9fb4', RED = '#ff5c7a', GOLD = '#ffcf4d', WHITE = '#ffffff', BLUE = '#6ec3ff', LILAC = '#a98bff';
@@ -19,41 +19,6 @@
       P('M-14-10H14Q20-10 20-4V4Q20 10 14 10H-2L-10 17L-8 10H-14Q-20 10-20 4V-4Q-20-10-14-10Z', WHITE, { 'stroke-width': 3.4 / s }) +
       Ci(-8, 0, 2.4, INK, ns()) + Ci(0, 0, 2.4, INK, ns()) + Ci(8, 0, 2.4, INK, ns()));
   }
-
-  // 身体：路径 + 脸的高度 + 肩宽一半
-  var SHAPE = {
-    bean: { d: 'M72 36C112 26 142 48 142 90C142 130 122 142 100 142C70 142 56 122 56 90C56 60 58 40 72 36Z', fy: 80, half: 42 },
-    egg: { d: 'M100 34C130 34 146 70 146 100C146 128 126 142 100 142C74 142 54 128 54 100C54 70 70 34 100 34Z', fy: 84, half: 45 },
-    pill: { d: 'M100 30C128 30 136 50 136 70V112C136 132 122 142 100 142C78 142 64 132 64 112V70C64 50 72 30 100 30Z', fy: 76, half: 36 },
-    tofu: { d: 'M62 46Q62 36 72 36H128Q138 36 138 46V132Q138 142 128 142H72Q62 142 62 132Z', fy: 80, half: 38 },
-    blob: { d: 'M70 40Q86 28 102 38Q120 26 134 44Q150 58 142 78Q152 96 142 114Q146 136 122 140Q100 148 80 140Q56 138 58 114Q48 96 58 78Q52 54 70 40Z', fy: 82, half: 42 },
-    drop: { d: 'M100 24C112 50 146 74 146 104C146 128 126 142 100 142C74 142 54 128 54 104C54 74 88 50 100 24Z', fy: 92, half: 45 },
-    onigiri: { d: 'M100 34C110 34 150 108 148 124C146 140 130 142 100 142C70 142 54 140 52 124C50 108 90 34 100 34Z', fy: 96, half: 38 },
-    cloud: { d: 'M66 74Q60 50 82 46Q90 30 110 36Q130 30 136 50Q156 54 148 76Q160 96 146 112Q150 136 124 138Q104 148 84 140Q58 142 56 118Q42 98 58 84Q54 78 66 74Z', fy: 84, half: 44 },
-    ghost: { d: 'M100 34C130 34 146 60 146 92V138Q138 146 130 138Q122 130 114 138Q106 146 100 138Q94 130 86 138Q78 146 70 138Q62 130 54 138V92C54 60 70 34 100 34Z', fy: 82, half: 46, noLegs: true }
-  };
-
-  // 头顶特征（画在身体后面，slot / headphones 画在前面）
-  var TOP = {
-    none: {},
-    horns: { back: function () { return P('M78 48Q70 24 80 16Q84 34 92 42Z', '#fff3d6') + P('M122 48Q130 24 120 16Q116 34 108 42Z', '#fff3d6'); } },
-    antenna: { back: function () { return P('M88 42L78 14M112 42L122 14') + Ci(78, 12, 7, GOLD) + Ci(122, 12, 7, PINK); } },
-    catears: { back: function (c) { return P('M62 64L62 20L94 42Z', c) + P('M138 64L138 20L106 42Z', c) + P('M68 50L68 32L82 42Z', PINK, ns()) + P('M132 50L132 32L118 42Z', PINK, ns()); } },
-    bearears: { back: function (c) { return Ci(66, 44, 15, c, { 'stroke-width': 5 }) + Ci(134, 44, 15, c, { 'stroke-width': 5 }) + Ci(66, 44, 7, PINK, ns()) + Ci(134, 44, 7, PINK, ns()); } },
-    bunnyears: { back: function (c) { return G('rotate(-12 84 30)', E(84, 22, 11, 28, c, { 'stroke-width': 5 }) + E(84, 24, 5, 18, PINK, ns())) + G('rotate(12 116 30)', E(116, 22, 11, 28, c, { 'stroke-width': 5 }) + E(116, 24, 5, 18, PINK, ns())); } },
-    sprout: { back: function () { return P('M100 40V12', null, { stroke: '#3a9d5d' }) + G('rotate(-28 88 12)', E(88, 12, 13, 7, '#8fe08a', { stroke: '#3a9d5d', 'stroke-width': 4 })) + G('rotate(28 112 8)', E(112, 8, 13, 7, '#8fe08a', { stroke: '#3a9d5d', 'stroke-width': 4 })); } },
-    spikes: { back: function () { return P('M64 56L66 24L82 40L90 12L104 36L116 14L122 40L138 26L138 58Z', INK); } },
-    crest: { back: function () { return P('M84 46Q70 14 92 18Q92 32 98 42Q96 8 116 12Q108 30 106 42Q118 16 136 28Q122 36 116 48Z', GOLD); } },
-    slot: { front: function () { return R(86, 40, 28, 7, 3.5, INK, ns()); } },
-    headphones: { front: function (c, k, sh) { return P('M' + (100 - sh.half - 4) + ' 84Q' + (100 - sh.half - 4) + ' 20 100 20Q' + (100 + sh.half + 4) + ' 20 ' + (100 + sh.half + 4) + ' 84', null, { stroke: k, 'stroke-width': 8 }) + R(100 - sh.half - 14, 70, 18, 28, 8, k) + R(100 + sh.half - 4, 70, 18, 28, 8, k); } }
-  };
-
-  var PATTERN = {
-    none: function () { return ''; },
-    spots: function () { return E(74, 122, 15, 11, INK, ns({ opacity: .85 })) + E(128, 62, 11, 9, INK, ns({ opacity: .85 })) + E(136, 126, 8, 7, INK, ns({ opacity: .85 })); },
-    stripes: function () { return P('M40 70L160 40M40 100L160 70M40 130L160 100M40 160L160 130', null, { stroke: WHITE, 'stroke-width': 9, opacity: .45 }); },
-    belly: function () { return E(100, 132, 34, 26, WHITE, ns({ opacity: .8 })); }
-  };
 
   function eye(type, x, y, c, dir) {
     var lid = P('M' + (x - 13) + ' ' + (y - 1) + 'q13-8 26 0', c, { 'stroke-width': 4 });
@@ -90,47 +55,10 @@
     scream: function (x, y) { return E(x, y + 6, 11, 15, RED, { 'stroke-width': 4 }) + E(x, y + 14, 6, 4, PINK, ns()); },
     w: function (x, y) { return P('M' + (x - 10) + ' ' + y + 'q5 6 10 0q5 6 10 0', null, { 'stroke-width': 4 }); }
   };
-
-  // 胳膊：返回 { d: 线, hands: [[x,y]...], at: 道具锚点 }
-  var ARMS = {
-    down: function (L, R) { return { d: 'M' + L + ' 104l-12 30M' + R + ' 104l12 30', hands: [[L - 12, 134], [R + 12, 134]], at: [R + 14, 138] }; },
-    hip: function (L, R) { return { d: 'M' + L + ' 104q-20 6-18 16q6 6 18 2M' + R + ' 104q20 6 18 16q-6 6-18 2', hands: [], at: [R + 14, 138] }; },
-    up: function (L, R) { return { d: 'M' + L + ' 104q-20 6-18 16q6 6 18 2M' + R + ' 102l20-26', hands: [[R + 20, 76]], at: [R + 22, 70] }; },
-    shrug: function (L, R) { return { d: 'M' + L + ' 102l-18-24M' + R + ' 102l18-24', hands: [[L - 18, 78], [R + 18, 78]], at: [R + 20, 70] }; },
-    hold: function (L, R) { return { d: 'M' + L + ' 106q-6 24 22 30M' + R + ' 106q6 24-22 30', hands: [[L + 22, 136], [R - 22, 136]], at: [100, 132] }; },
-    cross: function (L, R) { return { d: 'M' + L + ' 104Q96 132 ' + (R - 8) + ' 112M' + R + ' 104Q104 132 ' + (L + 8) + ' 112', hands: [], at: [R + 14, 138] }; }
-  };
-  var LEGS = {
-    stand: function () { return { d: 'M90 140L86 186M112 140L118 186', l: 86, r: 118 }; },
-    walk: function () { return { d: 'M90 140L74 184M112 140L124 186', l: 74, r: 124 }; },
-    cross: function () { return { d: 'M92 140L112 186M110 140L88 186', l: 88, r: 112 }; }
-  };
   function shoes(l, r, col, k) {
     return G('translate(' + (l - 86) + ' 0)', P('M70 184q16-6 22 2v8h-26q-6 0 4-10z', col) + P('M67 194h25', null, { stroke: k, 'stroke-width': 4 })) +
       G('translate(' + (r - 118) + ' 0)', P('M112 186q6-8 22-2q10 10 4 10h-26z', col) + P('M112 194h26', null, { stroke: k, 'stroke-width': 4 }));
   }
-
-  // 配饰。clip=true 的会被裁在身体轮廓里
-  var ACC = {
-    tie: { front: function (k) { return P('M95 110h10l-3 6h-4z', k, { 'stroke-width': 4 }) + P('M97 116l-4 20 7 7 7-7-4-20z', k, { 'stroke-width': 4 }); } },
-    bowtie: { front: function (k) { return P('M100 114l-15-8v16z', k, { 'stroke-width': 4 }) + P('M100 114l15-8v16z', k, { 'stroke-width': 4 }) + Ci(100, 114, 4.5, k); } },
-    lanyard: { front: function (k) { return P('M78 104L100 122L122 104', null, { stroke: k, 'stroke-width': 4 }) + R(91, 120, 18, 20, 4, WHITE) + Ci(100, 128, 3, k, ns()); } },
-    scarf: { front: function (k) { return P('M58 104Q100 122 142 104L142 116Q100 134 58 116Z', k) + P('M118 120l8 22 12-4-6-20Z', k); } },
-    hanfu: { clip: true, front: function (k, o, sh) { var y = Math.max(sh.fy + 32, 112); return P('M40 ' + (y + 14) + 'Q100 ' + (y + 24) + ' 160 ' + (y + 14), null, { stroke: o.accent2 || GOLD, 'stroke-width': 10 }) + P('M80 ' + y + 'L100 ' + (y + 18) + 'L120 ' + y, null, { stroke: k, 'stroke-width': 8 }); } },
-    apron: { clip: true, front: function (k) { return P('M74 108H126L122 150H78Z', WHITE, { 'stroke-width': 4 }) + R(88, 118, 24, 12, 3, k, { 'stroke-width': 3 }); } },
-    blanket: { clip: true, front: function (k) { return P('M30 98Q100 80 170 98V160H30Z', k, { 'stroke-width': 4 }) + Ci(72, 118, 4, WHITE, ns()) + Ci(100, 128, 4, WHITE, ns()) + Ci(128, 114, 4, WHITE, ns()) + Ci(86, 136, 4, WHITE, ns()) + Ci(118, 136, 4, WHITE, ns()); } },
-    jade: { front: function (k, o, sh) { var y = sh.fy + 30; return P('M86 ' + y + 'Q100 ' + (y + 10) + ' 114 ' + y, null, { 'stroke-width': 3 }) + E(100, y + 18, 7, 9, '#8fe0c0', { 'stroke-width': 4 }); } },
-    locket: { front: function (k, o, sh) { var y = sh.fy + 42; return P('M86 ' + (y - 12) + 'Q100 ' + (y - 2) + ' 114 ' + (y - 12), null, { 'stroke-width': 3, stroke: GOLD }) + P('M91 ' + y + 'H109V' + (y + 12) + 'Q100 ' + (y + 17) + ' 91 ' + (y + 12) + 'Z', GOLD, { 'stroke-width': 4 }) + P('M95 ' + y + 'Q95 ' + (y - 7) + ' 100 ' + (y - 7) + 'Q105 ' + (y - 7) + ' 105 ' + y, null, { 'stroke-width': 3 }); } },
-    crown: { front: function (k, o, sh) { return G('rotate(-14 100 ' + (sh.fy - 46) + ')', P('M82 ' + (sh.fy - 34) + 'L84 ' + (sh.fy - 58) + 'L94 ' + (sh.fy - 46) + 'L100 ' + (sh.fy - 62) + 'L106 ' + (sh.fy - 46) + 'L116 ' + (sh.fy - 58) + 'L118 ' + (sh.fy - 34) + 'Z', GOLD, { 'stroke-width': 4 })); } },
-    headband: { front: function (k, o, sh) { var y = sh.fy - 24; return P('M' + (100 - sh.half - 6) + ' ' + (y + 6) + 'Q100 ' + (y - 10) + ' ' + (100 + sh.half + 6) + ' ' + (y + 6), null, { stroke: k, 'stroke-width': 10 }) + P('M' + (100 + sh.half + 2) + ' ' + (y + 2) + 'l20-8 2 14Z', k, { 'stroke-width': 4 }); } },
-    beret: { front: function (k, o, sh) { var y = sh.fy - 46; return G('rotate(-12 106 ' + y + ')', E(106, y, 34, 11, k, { 'stroke-width': 4 }) + Ci(106, y - 12, 4, k, { 'stroke-width': 3 })); } },
-    cap: { front: function (k, o, sh) { var y = sh.fy - 34; return P('M68 ' + (y + 4) + 'Q100 ' + (y - 34) + ' 132 ' + (y + 4) + 'Z', k, { 'stroke-width': 4 }) + P('M126 ' + y + 'l24-6 2 10Z', k, { 'stroke-width': 4 }); } },
-    glasses: { front: function (k, o, sh) { var y = sh.fy; return Ci(86, y, 15, 'none', { 'stroke-width': 4 }) + Ci(116, y, 15, 'none', { 'stroke-width': 4 }) + P('M101 ' + y + 'h0', null, { 'stroke-width': 4 }); } },
-    hairpin: { front: function (k, o, sh) { var y = sh.fy - 40; return P('M124 ' + (y + 14) + 'L150 ' + (y - 10), null, { stroke: GOLD, 'stroke-width': 5 }) + Ci(152, y - 12, 6, RED, { 'stroke-width': 3 }) + P('M142 ' + (y - 2) + 'v14M148 ' + (y - 6) + 'v12', null, { stroke: GOLD, 'stroke-width': 2.5 }) + Ci(142, y + 14, 3, RED, ns()) + Ci(148, y + 8, 3, RED, ns()); } },
-    bow: { front: function (k, o, sh) { var y = sh.fy - 42; return P('M132 ' + y + 'l-16-10v20z', k, { 'stroke-width': 4 }) + P('M132 ' + y + 'l16-10v20z', k, { 'stroke-width': 4 }) + Ci(132, y, 4.5, k); } },
-    cape: { back: function (k) { return P('M66 96L44 168Q100 178 156 168L134 96Z', k); } },
-    ringlight: { back: function () { return Ci(100, 96, 84, 'none', { stroke: WHITE, 'stroke-width': 10 }); } }
-  };
 
   // 道具（本地坐标约 ±25）
   var PROP = {
@@ -180,64 +108,63 @@
   };
 
   function need(table, key, kind) { if (!Object.prototype.hasOwnProperty.call(table, key)) throw new Error('unknown ' + kind + ': ' + key); }
+  function o2(w, c) { if (w === 0) return ns(); var o = {}; if (w != null) o['stroke-width'] = w; if (c) o.stroke = c; return o; }
 
-  function svg(o) {
-    var shapeName = o.shape || 'bean';
-    need(SHAPE, shapeName, 'shape');
-    var sh = SHAPE[shapeName], c = o.color, k = o.accent || '#ff4f8b';
-    var topName = o.top || 'none', eyes = o.eyes || 'lazy', brows = o.brows || 'none', mouth = o.mouth || 'smirk';
-    var armName = o.arms || 'down', legName = o.legs || 'stand', pattern = o.pattern || 'none';
-    need(TOP, topName, 'top'); need(BROWS, brows, 'brows'); need(MOUTH, mouth, 'mouth'); need(ARMS, armName, 'arms'); need(LEGS, legName, 'legs'); need(PATTERN, pattern, 'pattern');
-    if (EYES.indexOf(eyes) < 0) throw new Error('unknown eyes: ' + eyes);
-    var acc = o.acc || [], props = o.props || [], deco = o.deco || [];
-    acc.forEach(function (n) { need(ACC, n, 'acc'); });
-    props.forEach(function (p) { need(PROP, p.name, 'prop'); });
-    deco.forEach(function (n) { need(DECO, n, 'deco'); });
+  // 工具包：形象绘图函数拿到的就是它。所有坐标在 200×220 画布里，鞋底约在 y=194
+  var K = {
+    INK: INK, PINK: PINK, RED: RED, GOLD: GOLD, WHITE: WHITE, BLUE: BLUE, LILAC: LILAC,
+    P: function (d, f, w, c) { return P(d, f, o2(w, c)); },
+    E: function (x, y, rx, ry, f, w, c) { return E(x, y, rx, ry, f, o2(w, c)); },
+    C: function (x, y, r, f, w, c) { return Ci(x, y, r, f, o2(w, c)); },
+    R: function (x, y, w, h, rx, f, sw, c) { return R(x, y, w, h, rx, f, o2(sw, c)); },
+    G: G,
+    op: function (v, s) { return '<g opacity="' + v + '">' + s + '</g>'; },
+    T: function (x, y, size, txt, f, rot) {
+      return '<text x="' + x + '" y="' + y + '" font-size="' + size + '" font-family="Arial Black,Arial,sans-serif" font-weight="900" text-anchor="middle" fill="' + (f || INK) + '"' +
+        (rot ? ' transform="rotate(' + rot + ' ' + x + ' ' + y + ')"' : '') + '>' + txt + '</text>';
+    },
+    heart: heart, spark: spark, bubble: bubble,
+    // 两只眼睛 + 腮红 + 眉毛 + 嘴。c 是眼睛周围的身体色（眼皮用）。o: {m: 嘴, my: 嘴的下移, b: 眉毛, nb: 不要腮红, d: 眼珠朝向}
+    face: function (l, r, y, eyes, c, o) {
+      o = o || {};
+      if (EYES.indexOf(eyes) < 0) throw new Error('unknown eyes: ' + eyes);
+      var s;
+      if (eyes === 'shades') {
+        s = R(l - 15, y - 10, 30, 19, 8, INK, ns()) + R(r - 15, y - 10, 30, 19, 8, INK, ns()) + P('M' + (l + 15) + ' ' + (y - 4) + 'H' + (r - 15), null, { 'stroke-width': 4 }) +
+          P('M' + (l - 8) + ' ' + (y - 4) + 'l6-3M' + (r - 8) + ' ' + (y - 4) + 'l6-3', null, { stroke: WHITE, 'stroke-width': 3 });
+      } else s = eye(eyes, l, y, c, o.d || 1) + eye(eyes, r, y, c, o.d || 1);
+      if (!o.nb) s += E(l - 6, y + 16, 8, 4.5, PINK, ns({ opacity: .75 })) + E(r + 6, y + 16, 8, 4.5, PINK, ns({ opacity: .75 }));
+      var b = o.b || 'none', m = o.m || 'smirk';
+      need(BROWS, b, 'brows'); need(MOUTH, m, 'mouth');
+      return s + BROWS[b](l, r, y) + MOUTH[m]((l + r) / 2 + 1, y + 22 + (o.my || 0));
+    },
+    mouth: function (m, x, y) { need(MOUTH, m, 'mouth'); return MOUTH[m](x, y); },
+    // 两条长腿 + 球鞋。a/b 是两条腿在身体上的起点 x，y 是起点高度
+    legs: function (a, b, y, k, t, shoe) {
+      var l, r, d;
+      if (t === 'walk') { l = a - 16; r = b + 12; d = 'M' + a + ' ' + y + 'L' + l + ' 184M' + b + ' ' + y + 'L' + r + ' 186'; }
+      else if (t === 'cross') { l = a - 2; r = b + 2; d = 'M' + a + ' ' + y + 'L' + r + ' 186M' + b + ' ' + y + 'L' + l + ' 186'; }
+      else { l = a - 4; r = b + 6; d = 'M' + a + ' ' + y + 'L' + l + ' 186M' + b + ' ' + y + 'L' + r + ' 186'; }
+      return P(d) + shoes(l, r, shoe || WHITE, k);
+    },
+    arm: function (d) { return P(d); },
+    hand: function (x, y) { return Ci(x, y, 5, INK, ns()); },
+    prop: function (name, x, y, r, s, opt) { need(PROP, name, 'prop'); return G('translate(' + x + ' ' + y + ') rotate(' + (r || 0) + ') scale(' + (s || 1) + ')', PROP[name](opt)); },
+    deco: function () { var s = ''; for (var i = 0; i < arguments.length; i++) { need(DECO, arguments[i], 'deco'); s += DECO[arguments[i]](); } return s; },
+    // 把 inner 裁在路径 d 里面（衣领、花纹用）
+    clip: function (d, inner) { var id = 'chb' + (++uid); return '<defs><clipPath id="' + id + '"><path d="' + d + '"/></clipPath></defs><g clip-path="url(#' + id + ')">' + inner + '</g>'; }
+  };
 
-    var top = TOP[topName], L = 100 - sh.half + 2, Rr = 100 + sh.half - 2;
-    var arm = ARMS[armName](L, Rr), fy = sh.fy, lx = 86, rx = 116;
-    var clipId = 'chb' + (++uid);
-    function placed(p) {
-      var at = p.at ? ARMS[p.at](L, Rr).at : arm.at;
-      var x = p.x == null ? at[0] : p.x, y = p.y == null ? at[1] : p.y;
-      return G('translate(' + x + ' ' + y + ') rotate(' + (p.r || 0) + ') scale(' + (p.s || 1) + ')', PROP[p.name](p));
-    }
-
-    var s = '<defs><clipPath id="' + clipId + '"><path d="' + sh.d + '"/></clipPath></defs>';
-    s += deco.map(function (n) { return DECO[n](); }).join('');
-    s += E(100, 200, 46, 6, 'rgba(43,34,51,.12)', ns());
-    s += acc.map(function (n) { return ACC[n].back ? ACC[n].back(k, o, sh) : ''; }).join('');
-    s += props.filter(function (p) { return p.behind; }).map(placed).join('');
-    if (!sh.noLegs) { var lg = LEGS[legName](); s += P(lg.d) + shoes(lg.l, lg.r, o.shoes || WHITE, k); }
-    s += top.back ? top.back(c, k, sh) : '';
-    s += P(sh.d, c);
-    var clipped = PATTERN[pattern]() + acc.filter(function (n) { return ACC[n].clip; }).map(function (n) { return ACC[n].front(k, o, sh); }).join('');
-    if (clipped) s += '<g clip-path="url(#' + clipId + ')">' + clipped + '</g>' + P(sh.d, null);
-    s += top.front ? top.front(c, k, sh) : '';
-    // 脸
-    if (eyes === 'shades') {
-      s += R(lx - 15, fy - 10, 30, 19, 8, INK, ns()) + R(rx - 15, fy - 10, 30, 19, 8, INK, ns()) + P('M' + (lx + 15) + ' ' + (fy - 4) + 'H' + (rx - 15), null, { 'stroke-width': 4 }) +
-        P('M' + (lx - 8) + ' ' + (fy - 4) + 'l6-3M' + (rx - 8) + ' ' + (fy - 4) + 'l6-3', null, { stroke: WHITE, 'stroke-width': 3 });
-    } else {
-      s += eye(eyes, lx, fy, c, 1) + eye(eyes, rx, fy, c, 1);
-    }
-    if (o.blush !== false) s += E(lx - 6, fy + 16, 8, 4.5, PINK, ns({ opacity: .75 })) + E(rx + 6, fy + 16, 8, 4.5, PINK, ns({ opacity: .75 }));
-    s += BROWS[brows](lx, rx, fy) + MOUTH[mouth](101, fy + 22);
-    s += acc.filter(function (n) { return ACC[n].front && !ACC[n].clip; }).map(function (n) { return ACC[n].front(k, o, sh); }).join('');
-    s += P(arm.d);
-    s += props.filter(function (p) { return !p.behind; }).map(placed).join('');
-    s += arm.hands.map(function (h) { return Ci(h[0], h[1], 5, INK, ns()); }).join('');
-
-    var cls = 'ch' + (o.anim ? ' ch-' + o.anim : '');
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" role="img"><g class="' + cls + '">' + s + '</g></svg>';
+  // art: [动画名, 绘图函数]
+  function svg(art) {
+    var anim = art[0], body = art[1](K);
+    var cls = 'ch' + (anim ? ' ch-' + anim : '');
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" role="img"><g class="' + cls + '">' + E(100, 200, 46, 6, 'rgba(43,34,51,.12)', ns()) + body + '</g></svg>';
   }
 
   var api = {
-    svg: svg,
-    parts: {
-      shape: Object.keys(SHAPE), top: Object.keys(TOP), eyes: EYES.slice(), brows: Object.keys(BROWS), mouth: Object.keys(MOUTH),
-      arms: Object.keys(ARMS), legs: Object.keys(LEGS), pattern: Object.keys(PATTERN), acc: Object.keys(ACC), prop: Object.keys(PROP), deco: Object.keys(DECO)
-    }
+    svg: svg, kit: K,
+    parts: { eyes: EYES.slice(), brows: Object.keys(BROWS), mouth: Object.keys(MOUTH), prop: Object.keys(PROP), deco: Object.keys(DECO) }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Chars = api;

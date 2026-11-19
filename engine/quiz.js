@@ -1,15 +1,19 @@
 (function (root) {
   'use strict';
 
+  // 分数最高的结果胜出；平分时，在越靠后的题里得过分的越优先；还分不出就取排在前面的
   function score(quiz, answers) {
-    var totals = {};
-    quiz.results.forEach(function (r) { totals[r.id] = 0; });
+    var totals = {}, last = {};
+    quiz.results.forEach(function (r) { totals[r.id] = 0; last[r.id] = -1; });
     answers.forEach(function (optIndex, qi) {
       var s = quiz.questions[qi].options[optIndex].s;
-      Object.keys(s).forEach(function (id) { totals[id] += s[id]; });
+      Object.keys(s).forEach(function (id) { totals[id] += s[id]; last[id] = qi; });
     });
     var best = quiz.results[0].id;
-    quiz.results.forEach(function (r) { if (totals[r.id] > totals[best]) best = r.id; });
+    quiz.results.forEach(function (r) {
+      var id = r.id;
+      if (totals[id] > totals[best] || (totals[id] === totals[best] && last[id] > last[best])) best = id;
+    });
     return best;
   }
 
